@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bombsLeft = document.querySelector('.left-bombs')
     let width = 16
     let squares = []
+    let init_bombs = 40
     let bombs = 40
 
     bombsLeft.innerHTML = bombs
@@ -49,6 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
             squares[i].setAttribute('data', total)
         } 
     }
+    function checkSuccess(){
+        let b = 0
+        let c = 0
+        for (let i=0;i<squares.length;i++){
+            if (squares[i].classList.contains('bomb') && squares[i].classList.contains('flag')){
+                b++
+            }
+            else if (squares[i].classList.contains('checked')){
+                c++
+            }
+        }
+        
+        if (b + c == width * width) {
+            console.log(b, c, width*width)
+            return true
+        }
+        return false
+    }
 
     function flag(square){
         if (square.classList.contains('checked')) return
@@ -62,9 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
             square.classList.add('flag')
             bombs--
             bombsLeft.innerHTML = bombs
+            if (checkSuccess()==true){
+                alert('success!!')
+                location.reload()
+            }
         }
-        console.log(bombs)
     }
+
     function bfs(square){
         let needvisit = []
         let nblist = []
@@ -111,15 +134,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    function gameOver(){
+        window.onload = setTimeout(function(){
+            alert('Game Over !');
+            window.location.reload();
+        }, 500);
+    }
 
-    function click(square){
+    function click(square) {
+        if (square.classList.contains('flag')) return
         if (square.classList.contains('bomb')){
-            alert('game over')
+            for (let i=0;i<squares.length;i++){
+                if (squares[i].classList.contains('bomb')){
+                    squares[i].classList.add('lose')
+                }
+            }
+            gameOver()
         } else {
             if (square.classList.contains('checked')) {
                 let nodeId = square.getAttribute('id')
                 let list = []
                 let zerolist = []
+                let bombsList = []
                 let gameover = 0
                 for (let j=0;j<8;j++){
                     let nr = parseInt(nodeId / width) + dy2[j]
@@ -130,35 +166,40 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (squares[idx].classList.contains('checked')){
                         continue
                     }
-                    
+                    if (squares[idx].classList.contains('flag')){
+                        continue
+                    }
+
                     if (squares[idx].classList.contains('bomb')){
                         if (squares[idx].classList.contains('flag')){
                             continue
                         }
                         else{
-                            gameover++
-                            continue
+                            for (let i=0;i<squares.length;i++){
+                                if (squares[i].classList.contains('bomb')){
+                                    squares[i].classList.add('lose')
+                                }
+                            }
+                            gameOver()
+                            return
                         }
                     }
                     if (squares[idx].getAttribute('data') == 0){
                         zerolist.push(squares[idx])
-                        console.log(idx)
                     }
                     else list.push(idx)
                 }
                 if (gameover >= 1){
-                    alert('gameover')
                     return
                 }
                 for (let i=0;i<zerolist.length;i++){
                     bfs(zerolist[i])
                 }
                 for (let i=0;i<list.length;i++){
-
                     squares[list[i]].classList.add('checked')
                     squares[list[i]].innerHTML = squares[list[i]].getAttribute('data')
                 }
-                if (bombs == 0){
+                if (checkSuccess()==true){
                     alert('success!!')
                 }
             }
@@ -173,11 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 //bfs
                 bfs(square) 
             }
-            if (bombs == 0){
-                alert('success!')
-            }   
-            
-
+            if (checkSuccess()==true){
+                alert('success!!')
+                location.reload()
+            }
         }
     }
 
