@@ -23,15 +23,26 @@
 .checked {
     background-color: blue;
     color: white;
-    font-size: large;
-    
+    font-weight: 700;
+    padding: 8px
 }
 .flag {
-    background-color: yellow;
+    background-color: red;
 }
 /* .bomb {
     background-color: aliceblue;
 } */
 .zero {
     background-color: black;
+}
+.left {
+    width: 480px;
+    height: 50px;
+    text-align: center;
+    padding: 10px;
+}
+.left-bombs {
+    display: inline;
+    font-size: 30px;
+    font-weight: 700;
 }

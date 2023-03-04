@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     const grid = document.querySelector('.grid')
-
+    const bombsLeft = document.querySelector('.left-bombs')
     let width = 16
     let squares = []
     let bombs = 40
+
+    bombsLeft.innerHTML = bombs
 
     let dy2 = [-1,-1,-1,0,0,1,1,1]
     let dx2 = [-1,0,1,-1,1,-1,0,1]
@@ -48,13 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function flag(square){
+        if (square.classList.contains('checked')) return
+        
         if (square.classList.contains('flag')){
             square.classList.remove('flag')
             bombs++
+            bombsLeft.innerHTML = bombs
         }
         else {
             square.classList.add('flag')
             bombs--
+            bombsLeft.innerHTML = bombs
         }
         console.log(bombs)
     }
