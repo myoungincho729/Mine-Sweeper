@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
             square.addEventListener('click', function(){
                 click(square)
             })
-            square.addEventListener('contextmenu', function(){
+            square.addEventListener('contextmenu', function(e){
+                e.preventDefault()
                 flag(square)
             })
         }
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function flag(square){
         if (square.classList.contains('checked')) return
-        
+
         if (square.classList.contains('flag')){
             square.classList.remove('flag')
             bombs++
