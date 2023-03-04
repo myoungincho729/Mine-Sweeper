@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+.grid {
+    height: 480px;
+    width: 480px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: grey;
+}
+
+.grid div {
+    height: 30px;
+    width: 30px;
+    border: 1px solid black;
+
+}
+.grid div:hover {
+    background-color: aqua;
+
+}
+
+.checked {
+    background-color: blue;
+    color: white;
+    font-size: large;
+    
+}
+.flag {
+    background-color: yellow;
+}
+/* .bomb {
+    background-color: aliceblue;
+} */
+.zero {
+    background-color: black;
+}
