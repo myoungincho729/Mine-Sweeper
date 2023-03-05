@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let nodeId = square.getAttribute('id')
                 let list = []
                 let zerolist = []
-                let bombsList = []
+                let flagNum = 0
                 let gameover = 0
                 for (let j=0;j<8;j++){
                     let nr = parseInt(nodeId / width) + dy2[j]
@@ -167,37 +167,34 @@ document.addEventListener('DOMContentLoaded', () => {
                         continue
                     }
                     if (squares[idx].classList.contains('flag')){
+                        flagNum++
                         continue
-                    }
-
-                    if (squares[idx].classList.contains('bomb')){
-                        if (squares[idx].classList.contains('flag')){
-                            continue
-                        }
-                        else{
-                            for (let i=0;i<squares.length;i++){
-                                if (squares[i].classList.contains('bomb')){
-                                    squares[i].classList.add('lose')
-                                }
-                            }
-                            gameOver()
-                            return
-                        }
                     }
                     if (squares[idx].getAttribute('data') == 0){
                         zerolist.push(squares[idx])
                     }
                     else list.push(idx)
                 }
-                if (gameover >= 1){
+                if (flagNum < square.getAttribute('data') || flagNum > square.getAttribute('data')){
                     return
-                }
-                for (let i=0;i<zerolist.length;i++){
-                    bfs(zerolist[i])
-                }
-                for (let i=0;i<list.length;i++){
-                    squares[list[i]].classList.add('checked')
-                    squares[list[i]].innerHTML = squares[list[i]].getAttribute('data')
+                } else {
+                    console.log(flagNum, square.getAttribute('data'))
+                    
+                    for (let i=0;i<zerolist.length;i++){
+                        bfs(zerolist[i])
+                    }
+                    for (let i=0;i<list.length;i++){
+                        if (squares[list[i]].classList.contains('bomb')){
+                            for (let i=0;i<squares.length;i++){
+                                if (squares[i].classList.contains('bomb')){
+                                    squares[i].classList.add('lose')
+                                }
+                            }
+                            gameOver()
+                        }
+                        squares[list[i]].classList.add('checked')
+                        squares[list[i]].innerHTML = squares[list[i]].getAttribute('data')
+                    }
                 }
                 if (checkSuccess()==true){
                     alert('success!!')
@@ -220,17 +217,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 })
